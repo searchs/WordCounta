@@ -38,3 +38,7 @@ build/
 .DS_Store
 /.idea/
 /.bsp/
+
+*checkpointdir*
+*inv-chk-dir*
+*output*

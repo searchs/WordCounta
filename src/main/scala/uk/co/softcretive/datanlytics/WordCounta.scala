@@ -32,7 +32,7 @@ object WordCounta extends Serializable {
 
     val wordCountQuery = countDF.writeStream
       .format("console")
-      .option("checkpointLocation", "/tmp/checkpoints")
+      .option("checkpointLocation", "checkpointdir")
       .outputMode("complete")
       .start()
 
