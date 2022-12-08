@@ -1,7 +1,8 @@
 ##  Word Count using Spark Streaming
 As part of developing a course on Spark Streaming, this example is a good start for the students and should give insight into basic Spark Streaming setup
 
-
+_Caveat_
+I am not a Scala guru - I only know enough to be dangerous 
 
 ### Dev Tools
 - Apache Spark (Core, SQL)
