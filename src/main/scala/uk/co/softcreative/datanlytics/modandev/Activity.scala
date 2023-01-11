@@ -1,3 +1,4 @@
+package uk.co.softcreative.datanlytics
 package uk.co.softcreative.datanlytics.modandev
 
 import org.apache.spark.sql.SparkSession

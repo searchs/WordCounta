@@ -1,4 +1,5 @@
 package uk.co.softcreative.datanlytics
+package uk.co.softcreative.datanlytics.procs
 
 import org.apache.log4j.Logger
 import org.apache.spark.sql.SparkSession

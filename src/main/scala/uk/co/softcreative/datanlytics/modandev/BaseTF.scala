@@ -1,7 +1,7 @@
+package uk.co.softcreative.datanlytics
 package uk.co.softcreative.datanlytics.modandev
 
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.functions._
 
 object BaseTF {
   /**
@@ -14,7 +14,7 @@ object BaseTF {
 
     val spark = SparkSession
       .builder()
-      .appName("Spark Analytics example")
+      .appName("Spark Basics")
       .master("local[*]")
       .getOrCreate()
 
