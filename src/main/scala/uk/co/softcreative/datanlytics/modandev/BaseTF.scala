@@ -79,9 +79,39 @@ object BaseTF {
     coffeeData.show(false)
 
     println("\n\tGoing the way of Spark SQL\n")
+    coffeeData.createOrReplaceTempView("coffeeData")
+    spark.sql("desc coffeeData").show(truncate = false)
 
+    spark.sql("select * from coffeeData").show(false)
 
+    //    Average roast calculations
+    spark.sql("select avg(roast) as avg_roast from coffeeData").show(false)
 
+    // Return Minimum roast
+    spark.sql("select min(roast) as min_roast from coffeeData").show(false)
+    // Return Maximum roast
+    spark.sql("select max(roast) as max_roast from coffeeData").show(false)
+    // Order by Roast value descending
+    spark.sql("select * from coffeeData order by roast desc").show(false)
+    // Order by Name - in ascending order
+    spark.sql("select * from coffeeData order by name asc").show(false)
+
+    //Simple ETL
+
+    spark.read.option("inferSchema", "false")
+      .schema(solidCoffeeSchema)
+      .csv("input/raw-coffee.txt")
+      .write
+      .format("parquet")
+      .mode("overwrite")
+      .save("input/coffee-data.parquet")
+
+    //TODO:  Switch to logger - remove print statements!!!!!
+    println("\t\nTest output to complete ETL process")
+    spark.read.parquet("input/coffee-data.parquet").createOrReplaceTempView("coffeeResult")
+    spark.sql("desc coffeeResult").show(false)
+
+    println("ETL now complete!")
 
   }
 
