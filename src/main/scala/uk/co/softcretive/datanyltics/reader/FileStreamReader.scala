@@ -31,6 +31,7 @@ object FileStreamReader {
     val rawDF = spark.readStream
       .format("json")
       .option("path", "input")
+      .option("maxFilesPerTrigger",1)
       .load()
 
     //    rawDF.printSchema()
