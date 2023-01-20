@@ -77,6 +77,7 @@ spark.sql(
     select stores.*, store_occupants.`occupants` from stores
     right join store_occupants on stores.`name` == store_occupants.`storename`
     """.stripMargin).show(false)
+//    WHERE stores.`capacity` < 36 AND store_occupants.`occupants` < 15
     // 2. DataFrame
     println("\n\tRIGHT JOINS - SPARK DATAFRAME\n")
 

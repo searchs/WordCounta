@@ -2,6 +2,7 @@ package uk.co.softcreative.datanlytics
 package uk.co.softcreative.datanlytics.modandev
 
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.types._
 
 object BaseTF {
   /**
@@ -46,7 +47,6 @@ object BaseTF {
     coffeeAndSchemaDF.printSchema
 
     // Specifying custom Schema
-    import org.apache.spark.sql.types._
 
     val coffeeSchema: StructType = coffeeAndSchemaDF.schema
     val coffeeSchemaDDL: String = coffeeSchema.toDDL
