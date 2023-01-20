@@ -97,5 +97,36 @@ spark.sql(
 
     df.join(occupancy, df("name") === occupancy("storename"), "left").show(false)
 
+    // SEMI-JOIN: Uses other dataset as a criteria to filter main dataset e.g. Usecase: give me all the items from my store that matches criteria from a competitor
+
+//    SPARK SQL
+    spark.sql("""CREATE OR REPLACE TEMPORARY VIEW boutiques as  (SELECT stores.`name` as boutiquename FROM stores WHERE capacity < 20) """)
+    spark.sql("""SELECT * FROM stores semi join boutiques on stores.`name` ==  boutiques.`boutiquename` """)
+
+
+//    SPARK DATAFRAME
+    val boutiqueDF = spark.sql("SELECT * FROM boutiques")
+    val semiJoin = df.join(boutiqueDF,
+      df("name") === boutiqueDF("boutiquename"), "semi")
+
+    semiJoin.show(false)
+
+//    ANTI JOIN or LEFT ANTI-JOIN
+    spark.sql("""SELECT * FROM stores anti join boutiques on stores.`name` == boutiques.`boutiquename` """).show(false)
+    println("END OF SparkSQL ANTI-JOIN")
+
+    val bqDF = spark.sql("""SELECT * FROM boutiques""")
+    val antiJoinDF = df.join(bqDF, df("name") === bqDF("boutiquename"), "anti")
+    antiJoinDF.show(false)
+
+    println("END OF SparkSQL ANTI-JOIN")
+    val inOper = spark.sql("""SELECT * FROM stores WHERE stores.`name` IN (SELECT boutiquename FROM boutiques)""")
+    inOper.show(false)
+    println("END OF SparkSQL IN operator")
+//    inOper.explain("formatted")
+
+    val notInOper = spark.sql("""SELECT * FROM stores WHERE stores.`name` NOT IN (SELECT boutiquename FROM boutiques)""")
+    notInOper.show(false)
+    println("END OF SparkSQL NOT IN operator")
   }
 }
