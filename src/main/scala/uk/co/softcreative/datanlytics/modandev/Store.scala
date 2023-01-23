@@ -14,14 +14,15 @@ object StoreOperations {
     StoreOccupants("c", 16),
     StoreOccupants("d", 55),
     StoreOccupants("e", 8),
-    StoreOccupants("f", 23)
   )
 
   private val stores = Seq(
     Store("a", 24, 8, 10),
     Store("b", 36, 7, 21),
     Store("c", 18, 5, 23),
-    Store("d", 42, 8, 18)
+    Store("d", 42, 8, 18),
+    Store("z", 28, 6, 17)
+
   )
 
 
@@ -128,5 +129,45 @@ spark.sql(
     val notInOper = spark.sql("""SELECT * FROM stores WHERE stores.`name` NOT IN (SELECT boutiquename FROM boutiques)""")
     notInOper.show(false)
     println("END OF SparkSQL NOT IN operator")
+
+//    FULL JOIN
+    val addStores = spark.createDataFrame(Seq(
+      ("f",42,5,23),
+      ("g", 19,7,18)
+    )).toDF("name", "capacity", "opens", "closes")
+
+    val fullJoined = df.union(addStores).join(occupancy,
+      df("name") === occupancy("storename"),
+      "full")
+
+    fullJoined.show(false)
+    println(" =" * 10 + " FULL JOIN " + "=" * 10)
+
+
+    val unionByNameDF = df.unionByName(addStores, allowMissingColumns = true)
+    unionByNameDF.show(false)
+
+// TODO: TASK - Return names of stores with availability
+    // Using INNER Query
+    val capaDF1 = spark.sql(
+      """ SELECT name, availability FROM (SELECT name, (capacity-occupants) AS availability
+        FROM stores JOIN store_occupants
+        ON stores.`name` == store_occupants.`storename`)
+        WHERE availability> 4
+        """.stripMargin)
+
+    capaDF1.show(false)
+
+// Using CONDITIONAL SELECT
+    val capaDF2 = spark.sql(
+      """ SELECT name, (capacity-occupants) AS availability
+        FROM stores JOIN store_occupants
+        ON stores.`name` == store_occupants.`storename`
+        WHERE (capacity-occupants) > 4
+        """.stripMargin)
+
+    capaDF2.show(false)
+    println("Capacity calculations by CONDITIONAL SELECT")
+
   }
 }
