@@ -157,8 +157,10 @@ spark.sql(
         """.stripMargin)
 
     capaDF1.show(false)
+    println("\n\tCapacity calculations by INNER QUERY.\n")
 
-// Using CONDITIONAL SELECT
+
+    // Using CONDITIONAL SELECT
     val capaDF2 = spark.sql(
       """ SELECT name, (capacity-occupants) AS availability
         FROM stores JOIN store_occupants
@@ -167,7 +169,22 @@ spark.sql(
         """.stripMargin)
 
     capaDF2.show(false)
-    println("Capacity calculations by CONDITIONAL SELECT")
+    println("\n\tCapacity calculations by CONDITIONAL SELECT\n")
+
+
+
+    // Using DataFrame Transformations
+    import spark.implicits._
+
+    val partySize = 4
+    val hasSeats = df
+      .join(occupancy, df("name") === occupancy("storename"))
+      .withColumn("availability", $"capacity".minus($"occupants"))
+      .where($"availability" >= partySize)
+      .select("name", "availability")
+
+    hasSeats.show(false)
+  println("\n\tDataFrame Transformation - Seat availability\n")
 
   }
 }
