@@ -7,15 +7,20 @@ val sparkVersion = "3.2.1"
 
 val sparkDependencies = Seq(
   "org.apache.spark" %% "spark-core" % sparkVersion,
-  "org.apache.spark" %% "spark-sql" % sparkVersion
+  "org.apache.spark" %% "spark-sql" % sparkVersion,
+
 )
 
 
 lazy val root = (project in file("."))
   .settings(
     name := "WordCounta Streama",
-    idePackagePrefix := Some("uk.co.softcreative.datanlytics"),
-    libraryDependencies ++= sparkDependencies
+//    idePackagePrefix := Some("uk.co.softcreative.datanlytics"),
+    libraryDependencies ++= Seq(
+      "org.apache.spark" %% "spark-core" % sparkVersion,
+      "org.apache.spark" %% "spark-sql" % sparkVersion,
+      "com.typesafe" % "config" % "1.4.2")
+
 
   )
 
